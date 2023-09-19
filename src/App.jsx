@@ -1,62 +1,62 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-
-
-  // Parent compontent + return
 const ParentComponent = () => {
-  const [savings, setSavings] = useState(100000); 
 
-  const childRequest = (amount) => {
-    if (amount <= savings) {
-      setSavings(savings - amount);
-    }
-  }
+const [currentAmount, updateAmount] = useState(10000);
+const childRequest = 250;
 
 return (
-  <div>
-    <h1>Parent Account</h1>
-    <p>Current ammount: {savings}KR </p>
-    <ChildComponent requestMoney={childRequest}/>
-  </div>
-)
 
+<div>
+<h1>Bank</h1>
+<h2>Parent Savings: {currentAmount} SEK</h2>
+<ChildComponent currentAmount = {currentAmount} updateAmount = {updateAmount} childRequest = {childRequest}/>
+</div>
+
+) 
 }
-  // Child compontent + return
-const ChildComponent = ({ requestMoney }) => {
-const [currentAmount, setAmount] = useState(0);
-const [amountNeeded, setAmountNeeded] = useState(250);
 
-const handleRequest = () => {
-  if(currentAmount < amountNeeded) {
-    const remainingAmount = amountNeeded - currentAmount;
-    requestMoney(remainingAmount);
-    setAmount(currentAmount + remainingAmount);
-    setAmountNeeded(0);
+const ChildComponent = (props) => {
+
+const [amount, setCurrentAmount] = useState(0);
+const [currentToys, updateToys] = useState(0);
+
+const requestMoney = () => {
+  
+  if(props.currentAmount >= props.childRequest) {
+    props.updateAmount(props.currentAmount - props.childRequest);
+    setCurrentAmount(amount + props.childRequest);
+  }
+}
+
+const buyToy = () => {
+
+  if(amount >= props.childRequest) {
+    setCurrentAmount(amount - props.childRequest);
+    updateToys(currentToys + 1);
   }
 
 }
 
   return (
- <div>
-  <h2>Kids Account</h2>
- <p>Current amount: {currentAmount}KR</p>
- <button onClick={handleRequest}>Request money</button>
+    <div>
+      <h2>Child Savings: {amount} SEK </h2>
+      <h2>Number of Toys: {currentToys}</h2>
+      <button onClick={requestMoney}>Request Money</button>
+      <br/>
+      <br/>
+      <button onClick={buyToy}>Buy Toy</button>
     </div>
-
   )
 
 }
-
 
 function App() {
  
   return (
    <div>
- <ParentComponent />
-   
+    <ParentComponent />
    </div>
   )
 }
